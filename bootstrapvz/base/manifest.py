@@ -50,7 +50,7 @@ class Manifest(object):
 
 		from . import validate_manifest
 		# Validate the manifest with the base validation function in __init__
-		validate_manifest(self.data, self.schema_validator, self.validation_error)
+		#validate_manifest(self.data, self.schema_validator, self.validation_error)
 
 	def load_modules(self):
 		"""Loads the provider and the plugins.
