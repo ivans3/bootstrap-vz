@@ -165,6 +165,13 @@ class FStab(Task):
 	@classmethod
 	def run(cls, info):
 		import os.path
+                from bootstrapvz.base.fs.partitions.unformatted import UnformattedPartition
+                from bootstrapvz.base.fs.partitions.single import SinglePartition
+ 
+                def is_additional(partition):
+                  return (not isinstance(partition, (UnformattedPartition, SinglePartition)) and
+                    partition.name not in ["boot", "swap", "root"])
+
 		p_map = info.volume.partition_map
 		mount_points = [{'path': '/',
 		                 'partition': p_map.root,
@@ -183,6 +190,15 @@ class FStab(Task):
 			                     'dump': '1',
 			                     'pass_num': '0',
 			                     })
+
+                for partition in sorted(
+                  filter(is_additional, partitions),
+                  key=lambda partition: len(partition.name)):
+                      mount_points.append({'path': "/" + partition.name,
+                                 'partition': getattr(p_map, partition.name),
+                                 'dump': '1',
+                                 'pass_num': '2',
+                                 })
 
 		fstab_lines = []
 		for mount_point in mount_points:
