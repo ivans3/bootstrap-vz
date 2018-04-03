@@ -191,6 +191,7 @@ class FStab(Task):
 			                     'pass_num': '0',
 			                     })
 
+                partitions = p_map.partitions
                 for partition in sorted(
                   filter(is_additional, partitions),
                   key=lambda partition: len(partition.name)):
